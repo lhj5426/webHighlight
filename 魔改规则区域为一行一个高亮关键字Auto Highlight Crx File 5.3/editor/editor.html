@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title data-i="app_name"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="/128.png" />
+    <script data-build-prod-firefox-remove type="application/javascript" src="/browser-polyfill.min.js"></script>
+<script defer src="/editor/editor.js"></script><link href="/editor/editor.css" rel="stylesheet">
+    <style>
+        /* 只对编辑器的 textarea 禁用自动换行，不影响显示区域 */
+        /* 使用更精确的选择器，只针对输入框 */
+        .v-textarea textarea[rows="10"] {
+            white-space: pre !important;
+            overflow-x: auto !important;
+            overflow-wrap: normal !important;
+            word-wrap: normal !important;
+            word-break: keep-all !important;
+        }
+
+        /* 确保显示区域不受影响 */
+        .v-card__text {
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+        }
+    </style>
+</head>
+<body>
+
+<div id="vue_editor_app"></div>
+
+</body>
+</html>
