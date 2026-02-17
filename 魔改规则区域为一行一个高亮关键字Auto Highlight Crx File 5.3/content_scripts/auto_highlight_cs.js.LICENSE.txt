@@ -1,0 +1,7 @@
+/*!***************************************************
+* advanced-mark.js v2.3.0
+* https://github.com/angezid/advanced-mark#readme
+* MIT licensed
+* Copyright (c) 2022–2023, angezid
+* Original author Julian Kühnel, license https://git.io/vwTVl
+*****************************************************/

@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "incremental": true,
+    "sourceMap": true,
+    "lib": ["es5", "es6", "es7", "esnext", "dom", "dom.iterable"],
+    "target": "es2021",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "strict": true
+  },
+  "exclude": [
+    "chrome_dev",
+    "safari_dev",
+    "edge_dev",
+    "firefox_dev",
+    "web_dev"
+  ]
+}

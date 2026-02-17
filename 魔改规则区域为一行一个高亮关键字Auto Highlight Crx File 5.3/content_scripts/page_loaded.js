@@ -1,0 +1,1 @@
+chrome.runtime.sendMessage({type:"page_loaded",url:location.href});
