@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关键字转换工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .copy-btn {
+            background: #2196F3;
+        }
+        .copy-btn:hover {
+            background: #0b7dda;
+        }
+        .info {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Auto Highlight 关键字转换工具</h1>
+        
+        <div class="info">
+            <strong>使用说明：</strong><br>
+            1. 从扩展编辑器中复制旧的关键字文本（空格分隔的）<br>
+            2. 粘贴到下面的输入框<br>
+            3. 点击"转换"按钮<br>
+            4. 复制转换后的文本<br>
+            5. 粘贴回扩展编辑器并保存
+        </div>
+
+        <h3>输入（空格分隔的旧格式）：</h3>
+        <textarea id="input" placeholder="粘贴旧的关键字（空格分隔）...&#10;例如：11 [251031] 东京 本子 33 44"></textarea>
+
+        <button onclick="convert()">🔄 转换为换行分隔</button>
+
+        <h3>输出（换行分隔的新格式）：</h3>
+        <textarea id="output" placeholder="转换后的关键字（每行一个）..." readonly></textarea>
+
+        <button class="copy-btn" onclick="copyOutput()">📋 复制输出</button>
+
+        <div class="success" id="success">✅ 已复制到剪贴板！</div>
+    </div>
+
+    <script>
+        function convert() {
+            const input = document.getElementById('input').value.trim();
+            if (!input) {
+                alert('请先输入关键字！');
+                return;
+            }
+
+            // 将空格分隔改为换行分隔
+            // 注意：这里简单地按空格分割，如果关键字本身包含空格，需要手动调整
+            const keywords = input.split(/\s+/);
+            const output = keywords.join('\n');
+
+            document.getElementById('output').value = output;
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('output');
+            if (!output.value) {
+                alert('请先转换！');
+                return;
+            }
+
+            output.select();
+            document.execCommand('copy');
+
+            const success = document.getElementById('success');
+            success.style.display = 'block';
+            setTimeout(() => {
+                success.style.display = 'none';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
+
