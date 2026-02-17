@@ -1,0 +1,1 @@
+try{self.importScripts("./browser-polyfill.min.js","./background_ah.worker.js")}catch(r){}
