@@ -1,0 +1,939 @@
+﻿
+
+<html>
+<head>
+    <script src="common.js"></script>
+
+    <script src="popupEditor.js"></script>
+
+    <script src="libs/purify/purify.js"></script>
+    <script src="libs/invertColor/invertColor.js"></script>
+    <script src="libs/jscolor/jscolor.js"></script>
+    <script src="libs/notyf.min.js"></script>
+    
+
+
+    <link rel="stylesheet" href="/libs/notyf.min.css" type="text/css">
+    <!--link rel="stylesheet" href="/libs/font-awesome/css/all.css"-->
+    <link rel="stylesheet" href="application.css" type="text/css">
+    <link rel="stylesheet" href="/libs/materialSymbols/Outlined-Regular.css">
+
+</head>
+<body>
+<div class="header" id="header">
+<!-- HTML code for navigation menu with hamburger icon -->
+<nav>
+    <button id="hamburger-menu" type="button">
+        <span class="material-symbols-outlined">
+            menu
+        </span>
+    </button>
+        <ul>
+            <li>
+                <a id="homeLink" ><!--i class="fa fa-cog" aria-hidden="true"></i-->
+                    <span class="material-symbols-outlined">
+                        home
+                    </span>
+                    <span id="menu_home_label">主页</span>
+                </a>
+
+            </li>
+
+        <li>
+            <a id="settingsLink" ><!--i class="fa fa-cog" aria-hidden="true"></i-->
+                <span class="material-symbols-outlined">
+                    settings
+                </span>
+                <span id="menu_settings_label">设置</span>
+            </a>
+
+        </li>
+
+        <li>
+            <a id="licenseLink">
+                <span class="material-symbols-outlined">
+                    shopping_cart
+                </span>
+                <span  id="menu_subscription_label">订阅</span>
+            </a>
+        </li>
+
+        <li>
+            <a id="sendErrorsLink">
+                <span class="material-symbols-outlined">
+                    bug_report
+                </span>
+                <span id="menu_sendErrors_label">报告错误</span>
+            </a>
+        </li>
+
+        <li>
+            <a id="helpLink">
+                <span class="material-symbols-outlined">
+                    help
+                </span>
+                <span id="menu_help_label" >帮助</span>
+            </a>
+        </li>
+
+    </ul>
+  </nav>
+  
+  
+  
+
+  
+
+    <div class="title"><span id="litTitle"></span> <span id="offDesc"></span></div>
+    
+
+    <div class="onoffswitch">
+        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+        <label class="onoffswitch-label" for="myonoffswitch">
+            <div class="onoffswitch-inner"></div>
+            <div class="onoffswitch-switch"></div>
+        </label>
+    </div>
+
+</div>
+
+
+<div>
+    <div id="menu">
+        <div id="homeMesssage" class="homeMessage">
+            <span class="material-symbols-outlined" style="padding: 8; color: #6C62FE;">
+                warning
+            </span>
+            <div id="homeMesssage-text" class="homeMessage-text">激活高亮</div>
+        </div>
+        <div id="byline" style="text-align:center;">扩展会在页面上高亮显示以下所有关键字。</div>
+
+        <div id="intro" class="intro" style="display:none;"><h2 id="popup_nowords">还没有定义关键字列表</h2>
+
+            <p>
+                <span id="popup_create1">创建一个关键字列表，让 </span>
+                <span id="popup_title" style="color:#7F0EC9;">Highlight This!</span>
+                <span id="popup_create2"> 在浏览网页时自动检测并高亮显示它们。</span>
+            </p>
+        </div>
+        <div class="addMenuLink" style="text-align:center;" ><span id="addGroupLink" class="addGroupLink material-symbols-outlined">ADD</span></div>
+        <div id="wordlistmenu" >
+            <span  id="collapseAll" class="expandButton" type="button">全部折叠</span>
+
+            <!--div style="flex:1;">
+                <input id="filterwords" type="search" placeholder="Filter">
+                <i id="filtersubmit" class="fa fa-search"></i>
+            </div-->
+            <div class="search-box" style="flex:1">
+                <input id="filterwords"  type="search" placeholder="搜索">
+                <button type="submit"><span class="material-symbols-outlined">
+                    search
+                    </span></button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="wordDisplay">
+        <div id="FreeVersion" style="display: none;"">
+            您正在使用 Highlight This! 的免费版本（带广告支持）<br />点击这里获取无广告版本。
+        </div>
+        <div id="wordData" style=" margin-top:5px;"></div>
+    </div>
+
+    <div id="onPage" style="display:none;">
+        <div style="margin-top: 10px;"><a id="toConfig" class="secondaryLink" style="font-weight:bold;">< 返回配置关键字</a></div>
+        <h2 id="foundWords">我们在此页面上找到了这些关键字。</h2>
+
+        <div style="text-align:center;">
+            <table id="wordsfound" style="margin: 0 auto;"></table>
+            <div style="margin-top: 20px;">
+                <a id="dontshowwords" class="secondaryButton"><i class="far fa-check-square" style="margin-right: 5px;"></i><span id="dontShowWordsLabel">不再显示页面上找到的关键字</span></a>
+            </div>
+            <!--p class="wordsFoundTip">
+                <span id="popup_tip1">Tip: Use </span>
+                <a style="text-decoration:underline;" id="browseHighlight">
+                    <span id="OSKey">Control</span>
+                    <span id="popup_tip2">+Shift+Space</span></a>
+                <span id="popup_tip3">to browse through words on the page</span>
+            </p-->
+        </div>
+
+    </div>
+    <div id="newGroupType" style="display:none;">
+        <form id="createGroupForm"  style="margin-top: 20px;"></form>
+            <h2 id="titleCreateNewList">创建新列表</h2>
+            <h3 id="newGroupTitleStorage" style="margin-bottom: 20px;">您想在浏览器之间同步此列表吗？</h3>
+            <div id="newGroupDetailStorage" class="inline-help">
+                同步列表在您登录浏览器后可在所有浏览器中使用，但由于存储限制，它支持的关键字较少。
+            </div>
+            <div>
+                <input type="radio" id="storageLocal" name="storage" value="local"><label for="storageLocal" id="storageLocalLabel">否，不同步此列表</label><br>
+                <input type="radio" id="storageSync" name="storage" value="sync"><label for="storageSync" id="storageSyncLabel">是，同步此列表</label><br>
+            </div>
+            <div id="newGroupTypePart2">
+                <h3 id="newGroupTitle" style="margin-bottom: 20px;">您想在哪里管理关键字？</h3>
+                <div id="newGroupDetail" class="inline-help">
+                    您可以在 Highlight This 中管理关键字列表，也可以在 Highlight This 外部（例如 pastebin）管理它们并定期导入。
+
+                </div>
+                <div>
+                    <input type="radio" id="typeLocal" name="type" value="local" checked><label for="typeLocal" id="localLabel">在 Highlight This 中</label><br>
+                    <input type="radio" id="typeRemote" name="type" value="remote"><label for="typeRemote" id="remoteLabel">外部</label><br>
+                    <!--input type="radio" id="typeRegex" name="type" value="regex"><label for="typeRegex" id="regexLabel">Regex</label><br-->
+                </div>
+            </div>
+            <div style="text-align:center; margin-top: 20px;">
+                <span id="cancelCreateGroup" class="secondaryButton" style="margin-right: 30px;">取消</span>
+                <button id="createGroupLink" class="primaryLink"  type="button">下一步</button>
+            </div>
+        </form>
+
+    </div>
+    <div id="newGroup" style="display:none;">
+        <h2 id="groupFormTitle"></h2>
+
+        <form id="groupForm">
+            <input type="hidden" id="editWordsGroupId">
+            <input type="hidden" id="field_listType">
+            <input type="hidden" id="field_storage">
+            <div>
+                <!--div id="deleteButton" class="deleteButton">
+                    <span id="deleteGroupLink"  style="text-align: right; margin-right:5px;">Delete word list</span>
+                    <i class="fa fa-trash"></i>
+                </div-->
+            </div>
+
+
+            <div class="tab">
+                <span class="general tablinks active" id="tabGeneral">常规</span>
+                <span class="general tablinks" id="tabStyleScreen">样式</span>
+                <span class="general tablinks" id="tabLimitations">限制</span>
+                <span class="general tablinks" id="tabAction">动作</span>
+                <span class="general tablinks" id="tabAdvanced">高级 <i id="advancedInfoIcon" class="fa fa-info-circle"></i></span>
+
+            </div>
+            <span id="firstScreen" class="general tabcontent">
+
+
+                <div class="fieldRow">
+                    <div class="fieldLabel" id="field_listname">列表名称：</div>
+                    <input id="group">
+                </div>
+
+                <div class="fieldRow">
+                    <div class="fieldLabel" id="field_note">备注（提示框）：</div>
+                    <input type="text" id="groupNote" name="groupNote" placeholder="鼠标悬停时显示的备注内容">
+                </div>
+                <div class="fieldRow" id="extSource">
+                      <div class="fieldLabel" id="field_source">来源：</div>
+                      <div id="remotelist_help" class="inline-help">远程来源需要返回一个文本文件，其中关键字位于单独的行上，类似于您创建本地列表的方式。</div>
+                        <table class="remoteConfigTable">
+                            <tr>
+                                <td>
+                                        <select id="field_remoteType">
+                                                <option value="web">Web</option>
+                                                <option value="pastebin">Pastebin</option>
+                                                <option value="googleSheets">Google Sheets</option>
+                                        </select>
+                                </td>
+                                <td style="border-left: 1px solid #555;padding-left: 5px;">
+                                        <div id="remoteSourceAttributes">
+                                                <div id="pastbinAttributes">
+                                                    <span>Pastebin ID：</span>
+                                                    <input id="pastebinId">
+
+                                                </div>
+                                                <div id="webAttributes">
+                                                    <span>网址：</span>
+                                                    <input id="remoteWebUrl" size="50">
+                                                </div>
+                                                <div id="googleSheetsAttributes">
+                                                    <div style="margin-bottom: 7px;">
+                                                        <button id="launchGoogleSheetsAssisantbtn" type="button">启动助手</button>
+                                                        <button id="closeGoogleSheetsAssisantbtn"  type="button" style="display: none;">关闭助手</button>
+                                                    </div>
+                                                    <span id="googleSheetsIdContainer">
+                                                        <span id="labelSheetsId">Sheets ID：</span>
+                                                        <input id="googleSheetsId">
+                                                    </span>
+                                                </div>
+
+                                        </div>
+
+                                </td>
+                            </tr>
+                           
+                            <tr id="syncRow"> 
+                                <td colspan="2">
+                                    <div class="fieldRow">
+                                        
+                                    </div>
+                                    <div class="fieldRow">
+                                        <button id="syncLink"  type="button"><i class="fas fa-sync"></i> <span id="syncLinkText">同步</span></button>
+                                        <span id="last_synced_on">上次同步时间：</span>
+                                        <span id="syncStatusLastUpdated"></span>
+                                        <span id="syncStatusMessage" style="display: none;">同步状态</span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                </div>
+                <div class="fieldRow" id="regexSection">
+                    <div id="regexSource">
+                        <div class="fieldLabel">Regex:</div>
+                        <textarea id="regex" style="width:100%; height:120px"></textarea>
+                    </div>
+                </div>
+                <div id="googleSheetsAssistant">
+                    <h2 id="googleSheetsAssistantTitle" style="margin-top: 0;">Google Sheets 助手</h2>
+                    <ol>
+                        <li><div id="googleAssist1">创建或打开现有的 Google Sheets 文档。</div></li>
+                        <li><div id="googleAssist2">在第一个工作表的第一列中创建您的关键字列表。</div></li>
+                        <li><div id="googleAssist3">在网络上发布您的工作表</div><img src="images/GoogleAssistant1.png" style="height: 85px;"></li>
+                        <li><div id="googleAssist4">共享 Google Sheets</div><img src="images/GoogleAssistant2.png" style="height: 85px;"></li>
+                        <li><div id="googleAssist5">从"复制链接"中选择链接</div></li>
+                        <li>
+                            <div id="googleAssist6">在此处粘贴链接</div>
+                            <input id="googleAssistLink">
+                            <button id="googleAssistOKbtn"  type="button">确定</button>
+                            <div id="googleAssistInfo"></div>
+                        </li>
+
+                    </ol>
+                </div>
+                <div class="fieldRow" id="wordsSection">
+                    <div><span class="fieldLabel" id="field_words">关键字： </span></div>
+
+                    <div id="field_words_help" class="inline-help">您可以使用 * 和 ? 通配符，每一行被视为一个关键字</div>
+
+                    <!--textarea id="words" style="width:100%; height:250px"></textarea-->
+                    <div class="wordEditor">
+                        <table style="width: 100%; border-spacing: 0;" class="toolbar">
+                            <tr style="vertical-align: middle;" >
+                                <td id="editorMenuDefault">
+                                    <a id="wordsSelectBtn" href="">
+                                        <span id="WordsSelectIcon" class="material-symbols-outlined">
+                                        check_box
+                                        </span>
+                                    </a>
+                                    <a id="wordsDelete">
+                                        <span class="material-symbols-outlined">
+                                            delete
+                                        </span>
+                                    </a>
+                                    <div id="wordsMoveContainer">
+                                        <a id="wordsMove">
+                                            <span class="material-symbols-outlined">
+                                                send
+                                            </span>
+                                        </a>
+                                        <div id="wordsMoveMenu">
+                                            <div id="wordsMoveMenuTitle">移动到：</div>
+                                            <ul id="wordsMoveMenuList">
+
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                    <a id="wordsSortAsc">
+                                        <span class="material-symbols-outlined flip-horizontal">
+                                            sort
+                                        </span>
+                                    </a>
+                                    <a id="wordsSortDesc">
+                                        <span class="material-symbols-outlined">
+                                            sort
+                                        </span>
+                                    </a>
+                                    <!--a id="wordsNotes">
+                                        <span class="material-symbols-outlined">
+                                            edit_note
+                                        </span>
+                                    </a -->
+                                </td>
+                                <!--td id="editorMenuDefaultNotes" style="display: none";>
+                                    <span>Notes</span>
+                                    <a id="wordsNotesBack">back</a>
+                                </td-->
+                                <td style="text-align: right; width:125px;">
+
+                                    <div class="search-box" style="flex:1">
+                                        <input id="filterwordlist"  type="search" placeholder="筛选">
+                                        <button id="searchicon"  type="submit"><span class="material-symbols-outlined">
+                                            search
+                                            </span></button>
+                                    </div>
+
+
+                                    <!--input id="filterwordlist" placeholder="Filter">
+                                    <i id="filterwordlistsubmit" class="fa fa-search"></i-->
+                                </td>
+                            </tr>
+
+                        </table>
+                        <!--div style="text-align:right; margin-right:5px;">
+                        
+
+
+                        </div-->
+                        <div id="words" style="display: block; height:225px" contenteditable="true" spellcheck="false" ondrop="return false;"></div>
+                        <!--div id="notesOnWords" style="display: none; height: 225px;resize: both;overflow: auto;">
+                        </div -->
+                    </div>
+                </div>
+
+                <div id="findWordsSection" class="fieldRow" style="line-height: 23px;">
+
+
+                    <input id="findwords" type="checkbox" checked><label for="findwords" id="field_detection_help">仅检测完整关键字</label>
+
+                    <div id="hintNonUnicode" class="hint" style="display:none"><i class="fa fa-info-circle"></i> <span id="non_unicode_chars">您已将非 Unicode 字符添加到关键字列表中，取消选中完整关键字检测以正确高亮显示它们</span></div>
+                </div>
+            </span>
+            <span id="styleScreen" style="display:none;" class="general tabcontent">
+                <div class="fieldRow">
+                    <div class="fieldLabel" id="field_colors">颜色：</div>
+                    <div id="field_colors_help" class="inline-help" >选择颜色或输入 HTML 颜色代码，例如 "#ccc" 或 "green"</div>
+
+                    <div class="colorContainer">
+                        <div class="colorSelector">
+                            <div class="colorSelectorHeader">
+                                <div id="field_foreground"></div>
+                                <div id="groupFColorSelectorInput"></div>
+                            </div>
+                            <div class="colorSelectorPicker" id="groupFColorSelector"></div>
+                            
+                        </div>
+                        <div class="colorSelector">
+                            <div class="colorSelectorHeader">
+                                <div id="field_background"></div>
+                                <div id="groupColorSelectorInput"></div>
+                            </div>
+                            <div class="colorSelectorPicker"  id="groupColorSelector"></div>
+                        </div>
+
+                    </div>
+
+                    <!--input type="checkbox" id="onlyColorBorder" name="onlyColorBorder"><label for="onlyColorBorder">Only show a border</label>
+                    <input type="checkbox" id="noShadowBox" name="noShadowBox"><label for="noShadowBox">Do not show shadowbox</label-->
+
+                </div>
+                <div class="fieldRow">
+
+                    
+                                      
+                    <button id="bold-state-button" class="state-button material-symbols-outlined" type="button">
+                        format_bold
+                   </button>
+                    <input type="checkbox" id="bold" class="state-checkbox">    
+                    
+                    <button id="italic-state-button" class="state-button material-symbols-outlined" type="button">
+                        format_italic
+                    </button>
+                    <input type="checkbox" id="italic" class="state-checkbox">       
+
+                    <button id="underline-state-button" class="state-button material-symbols-outlined" type="button">
+                        format_underlined
+                    </button>
+                    <input type="checkbox" id="underline" class="state-checkbox"> 
+
+                    <button id="border-state-button" class="state-button material-symbols-outlined" type="button">
+                        border_style
+                    </button>
+                    <input type="checkbox" id="border" class="state-checkbox">        
+
+                    <button id="radius-state-button" class="state-button material-symbols-outlined" type="button">
+                        rounded_corner
+                    </button>
+                    <input type="checkbox" id="radius" class="state-checkbox">        
+
+                    <button id="padding-state-button" class="state-button material-symbols-outlined" type="button">
+                        border_outer
+                    </button>
+                    <input type="checkbox" id="padding" class="state-checkbox">        
+                </div>
+    
+                <div class="fieldRow">
+                    <div class="colorContainer">
+                        <div class="colorSelector">
+                            <div class="colorSelectorHeader">
+                                <div id="field_boxColor"></div>
+                                <div id="groupBoxSelectorInput"></div>
+                            </div>
+                            <div class="colorSelectorPicker"  id="groupBoxSelector"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="highlightExample">
+                    <span id="example1">This is an</span>
+                    <span id="example">example</span>
+                    <span id="example2">of highlighted text</span>
+                </div>
+
+                <div class="fieldRow" style="margin-top: 30px;">
+                    <div class="fieldLabel" id="field_note_colors">提示框颜色：</div>
+                    <div class="colorContainer">
+                        <div class="colorSelector">
+                            <div class="colorSelectorHeader">
+                                <div>提示框文字：</div>
+                                <div id="noteTextColorSelectorInput"></div>
+                            </div>
+                            <div class="colorSelectorPicker" id="noteTextColorSelector"></div>
+                        </div>
+                        <div class="colorSelector">
+                            <div class="colorSelectorHeader">
+                                <div>提示框背景：</div>
+                                <div id="noteBgColorSelectorInput"></div>
+                            </div>
+                            <div class="colorSelectorPicker" id="noteBgColorSelector"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="noteExample" style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
+                    <span style="font-weight: bold;">提示框预览：</span>
+                    <div id="noteExampleTooltip" style="padding: 6px 12px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                        这是提示框内容
+                    </div>
+                </div>
+
+            </span>
+            <span id="secondScreen" style="display:none;" class="general tabcontent">
+                <div id="sites_info" class="inline-help">列出您希望高亮显示的网站。您可以定义白名单和黑名单。黑名单优先。
+                    如果未定义任何内容，则在所有页面上设置高亮。您可以使用 * 和 ? 等通配符。
+                    <br /> 示例：*.google.com, www.google.com, www.google.com/something/page.html, www.go?gle.com/*/page.html
+                </div>
+
+                <div class="flexContainer">
+                    <div class="fieldLabel" id="field_highlightOn">在以下网站高亮</div>
+                    <select id="listLimitationHighlightOn"  class="limitationSelector"></select>
+                </div>
+                <textarea id="highlightOnSites" style="width:100%; height:80px" class="limitationsArea"></textarea>
+
+                <div class="flexContainer">
+                    <div class="fieldLabel" id="field_dontHighlight">不在以下网站高亮：</div>
+                    <select id="listLimitationDontHighlightOn"  class="limitationSelector"></select>
+                </div>
+                <textarea id="dontHighlightOnSites" style="width:100%; height:80px" class="limitationsArea"></textarea>
+
+                <div class="fieldLabel" id="field_containerSelector">仅当容器匹配此查询选择器时才高亮</div>
+
+                <input id="containerSelector" type="text">
+
+            </span>
+
+            <span id="actionScreen" style="display: none" class="general tabcontent">
+
+                <div class="fieldRow" id="action_intro">
+                    定义点击高亮时要执行的操作
+                </div>
+
+                <select id="action">
+                    <option value="0" id="action_none">无</option>
+                    <option value="1" id="action_newtab">在新标签页中打开</option>
+                    <option value="2" id="action_sametab">在当前标签页中打开</option>
+                    <option value="3" id="action_newwindow">在新窗口中打开</option>
+                </select>
+
+
+                <div id="action1Attributes">
+                    <div id="label_link" class="fieldLabel"></div>
+                    <input id="actionLink" type="text" style="width:100%">
+                    <div id="actionLinkValidation" style="display: none;"  class="statusError"></div>
+                    <div id="action1Info">
+                        <div class="actionExample" id="actionExample">
+                            <p id="actionExampleHelp">例如，使用标记 "Hi?hL*" 高亮单词 "highlight"，将产生：</p>
+                            <p id="actionExampleUrl">http://wikipedia.com/highlight</p>
+                        </div>
+                        <div>
+                            <ul class="actiontips">
+                                <li id="action_tip1"><strong>%t%</strong> 被替换为页面上找到的文本（例如 Highlight）</li>
+                                <li id="action_tip2"><strong>%s%</strong> 被替换为您的搜索关键字（例如 Hi?hL*）</li>
+                                <li id="action_tip3"><strong>%tu%</strong> 或 <strong>%tl%</strong>，<strong>%su%</strong> 或 <strong>%sl%</strong> 强制转换为大写或小写</li>
+                                <li id="action_tip4" style="margin-top:10px;">一些示例：https://wikipedia.com/%t% , https://google.com/search?q=%t%</li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+
+                <span id="actionDetails">
+                    <!--table style="width:100%;">
+                        <tr>
+                            <td id="label_action">Action:</td>
+                            <td>
+                                
+                            </td>
+                        </tr>
+                        <tr id="action1Attributes">
+                            <td id="label_link">Link:</td>
+                            <td>
+                            
+                            </td>
+                        </tr>
+                        </tr>
+                    </table -->
+                    
+                </span>
+            </span>
+
+            <span id="thirdScreen" style="display: none" class="general tabcontent">
+
+                <div>
+
+                    <div class="fieldRow">
+                        <input id="showInEditableFields" type="checkbox" checked><label for="showInEditableFields" id="field_showInEditableFields_help">在可编辑字段中高亮</label>
+                    </div>
+                    <div class="fieldRow">
+
+                        <input id="notifyOnHighlight" type="checkbox" checked><label for="notifyOnHighlight" id="field_notifyOnHighlight_help">找到关键字时通知</label>
+                        <select id="notifyFrequency"><option value="1" id="notifyFrequency_1">每页一次</option><option value="2" id="notifyFrequency_2">每次</option></select>
+                    </div>
+                    <div class="fieldRow">
+                        <input id="regexTokens" type="checkbox"><label for="regexTokens" id="field_useRegexTokens_help">使用正则表达式标记而不是简单的 * 和 ? 通配符</label>
+                    </div>
+                    <div class="fieldRow">
+                        <input id="caseSensitive" type="checkbox"><label for="caseSensitive" id="field_caseSensitive_label">区分大小写比较</label>
+                    </div>
+                    <div class="fieldRow" id="syncFrequencySetting">
+
+                            <label for="syncFrequency" id="syncFrequencyLabel">下载频率：</label>
+
+
+                            <select id="syncFrequency" name="syncFrequency">
+                                <option value='10'>每 10 分钟</option>
+                                <option value='30'>每 30 分钟</option>
+                                <option value='60'>每小时</option>
+                                <option value='240'>每 4 小时</option>
+                                <option value='480' selected>每 8 小时</option>
+                                <option value='1440'>每天</option>
+                            </select>
+                    </div>
+                    <div id="migrateSuggestion" class="fieldRow" style="border-top: 1px solid #eee;padding-top: 5px;padding-bottom: 20px;">
+                        <table>
+                            <tr>
+                                <td>
+                                    <span id="migrateSuggestionText">将此列表更改为同步列表，以便在您登录的所有浏览器上使用</span>
+                                </td>
+                                <td style="text-align: right;
+                                white-space: nowrap;">
+                                    <button id="migrateSuggestionButton" type="submit" class="secondaryButton">同步列表</button>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                    </div>
+                </div>
+            </span>
+            <div class="generalButtons">
+                <div id="validationErrors"></div>
+                <span id="cancelAddGroup" class="secondaryButton" style="margin-right: 30px;">取消</span>
+                <button id="formSubmitButton" type="submit" class="primaryLink">添加</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div id="settingsGroup" style="display:none;">
+
+        <h2 id="popup_settings">设置</h2>
+        <!--div style="position: absolute;top: 55px;">
+            <span id="backFromSettings" class="secondaryLink">< Back</span>
+        </div-->
+        <div class="tab">
+            <span class="settings tablinks active" id="tabSettingsGeneral">常规</span>
+            <span class="settings tablinks" id="tabSettingsLimitations">限制</span>
+            <span class="settings tablinks" id="tabSettingsBackup">备份</span>
+            <span class="settings tablinks" id="tabSettingsExport">导出</span>
+        </div>
+        
+        <span id="settingsGeneral" class="settings tabcontent">
+            <div style="margin:10px;">
+                <form>
+                    <div>
+                        <input type="checkbox" id="showFoundWords"><label for="showFoundWords"  id="field_showFoundWords">显示找到的关键字：</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="printHighlights"><label for="printHighlights" id="field_printHighlights">打印高亮：</label>
+                    </div>
+
+
+
+                    <div class="fieldRow">
+                        <div class="fieldLabel" id="field_performance" >性能</div>
+                        <div class="inline-help" id="performanceHelp">
+                            定义 Highlight This 允许对您的设备资源（处理能力）产生多大影响。
+                        </div>
+                        <div>
+                            <input type="range" id="performance" list="perfticks" style="width: 100%" min="0" max="3">
+
+                            <datalist id="perfticks">
+                                <option value="0" label="高">
+                                <option value="1">
+                                <option value="2">
+                                <option value="3">
+                            </datalist>
+                        </div>
+                        <div id="perfomanceDescription">高性能机器，高亮器将快速刷新页面</div>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="magicHighlighting"><label for="magicHighlighting" id="field_magicHighlighting">更快的高亮</label>
+                    </div>
+                </form>
+
+            </div>
+
+        </span>
+
+        <span id="settingsLimitations" style="display: none" class="settings tabcontent">
+            <div style="margin:10px;">
+
+                    <div>
+                        <div id="field_neverHighlightOn_help" class="inline-help">
+                            <br />列出您永远不希望出现高亮的网站。您可以使用 * 和 ? 等通配符。
+                            <br /> 示例：*.google.com, www.google.com, www.google.com/something/page.html
+                        </div>
+
+                        <div class="flexContainer">
+                            <div class="fieldLabel" id="field_onlyHighlightOn">仅在以下网站高亮：</div>
+                            <select id="globalLimitationHighlightOn" class="limitationSelector"></select>
+                        </div>
+                        <textarea id="onlyHighlightOn" style="width:100%; height:80px" class="limitationsArea"></textarea>
+
+                        <div class="flexContainer">
+                            <div class="fieldLabel" id="field_neverHighlightOn">永不在以下网站高亮：</div>
+                            <select id="globalLimitationDontHighlightOn" class="limitationSelector"></select>
+                        </div>
+                        <textarea id="neverHighlightOn" style="width:100%; height:80px" class="limitationsArea"></textarea>
+
+
+                    </div>
+            </div>
+        </span>
+        <span id="settingsBackup" style="display: none" class="settings tabcontent">
+            <div style="margin:10px;">
+                <div class="fieldContainer">
+                    <div class="fieldLabel" id="field_exportSettings">导出设置：</div>
+                    <div id="exportLink" class="primaryLink">导出</div><div id="exportLinkDownload"></div>
+                </div>
+                <div class="fieldContainer">
+                    <div class="fieldLabel" id="field_autoBackupSettings">自动备份：</div>
+                    <div style="margin-bottom:10px;" id="info_autoBackupSettings">在您的下载文件夹中创建备份</div>
+
+                    <select style="margin-bottom:10px;" id="autoBackupFrequency" name="autoBackupFrequency">
+                        <option value='never' id="autoBackup_Never">从不</option>
+                        <option value='daily' id="autoBackup_Daily">每天</option>
+                        <option value='weekly' id="autoBackup_Weekly">每周</option>
+                        <option value='monthly' id="autoBackup_Monthly">每月</option>
+                    </select>
+                </div>
+
+                <div class="fieldContainer">
+                    <div    class="fieldLabel" id="field_importSettings">导入设置：</div>
+                    <form id="uploadform">
+                        <input type="file" id="importFile">
+                    </form>
+
+                    <div id="hintRestore" class="hint" style="display:none"><i class="fa fa-info-circle"></i> <span id="restoreWarning">恢复备份</span></div>
+                    <span class="primaryLink" id="importFileLink"  style="display:none;">导入</span>
+                    <button class="primaryLink" id="importLocalFileLink"  type="button" style="display:none;margin-top: 10px;width: 100%;">导入本地</button>
+                    <button class="primaryLink" id="importSyncFileLink"  type="button"  style="display:none;margin-top: 10px;width: 100%;">导入同步</button>
+                    <span id="importFFLink" class="secondaryButton">导入文件</span>
+
+                    <span id="importError" style="color:red;"/>
+
+                </div>
+                <div class="fieldContainer">
+                    <div class="fieldLabel" id="field_clearSyncLists">重置数据和设置：</div>
+                    <div style="margin-bottom:10px;" id="info_clearSyncLists">在重置数据和设置之前，请确保创建备份</div>
+                    <div id="resetDataAndSettings" class="primaryLink">重置数据和设置</div>
+                </div>
+
+
+            </div>
+        </span>
+
+        <span id="settingsExport" style="display: none" class="settings tabcontent">
+            <div style="margin:10px;">
+                
+                    <div>
+                        
+
+                    </div>
+            </div>
+        </span>
+        <div class="generalButtons" >
+            <span id="cancelSettings" class="secondaryButton" style="margin-right: 30px;">取消</span>
+            <button id="saveSettings"  type="button" class="primaryLink">保存</button>
+        </div>
+
+
+    </div>
+
+    <div id="sendErrorsGroup" style="display:none;">
+        <h2 id="field_sendErrors">向开发者报告错误</h2>
+        <div style="margin: 10px;">
+            <div class="fieldContainer">
+
+                <div class="inline-help" id="sendErrorsHelp">
+                    <p>如果您遇到问题，请向开发者发送错误报告。</p>
+                    <p>捕获的错误也将被发送，此信息不包含个人数据或关键字。</p>
+                </div>
+
+                    <div class="fieldLabel" id="field_sendErrorsDescription">问题描述：</div>
+                    <textarea id="sendErrorsIssue" style="height: 75px; width: 100%;"></textarea>
+                    <div class="fieldLabel" id="field_sendErrorsEmail">电子邮件地址：</div>
+                    <input type="email" id="sendErrorsEmail"/>
+
+                    <button id="sendErrorsButton" class="primaryLink"  type="button" style="margin-top: 10px;">发送</button>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <div id="licenseGroup" style="display:none;">
+        <div id="freeLicense" style="display: block;" class="currentLicenseInfo">
+            <div class="license-title" id="currentlicense-free-title">您正在使用免费版本</div>
+            <ul class="license-description" id="currentlicense-free-description">
+               <li>您的高亮限制为 200 个关键字。Highlight This! 将仅使用列表中的前 200 个关键字</li>
+               <li>您拥有有限的高亮样式</li>
+               <li>您没有广告</li>
+            </ul>
+        </div>
+        <div id="tempLicense" style="display: block;" class="currentLicenseInfo">
+            <div class="license-title" id="currentlicense-temp-title">您正在使用免费版本</div>
+            <ul class="license-description" id="currentlicense-temp-description">
+               <li>您的高亮限制为 200 个关键字。Highlight This! 将仅使用列表中的前 200 个关键字</li>
+               <li>您拥有有限的高亮样式</li>
+               <li>您没有广告</li>
+            </ul>
+        </div>
+        <div id="adLicense" style="display: block;" class="currentLicenseInfo">
+            <div class="license-title" id="currentlicense-ad-title">您正在使用广告支持版本</div>
+            <ul class="license-description" id="currentlicense-ad-description">
+                <li>您的高亮是无限制的</li>
+                <li>您拥有所有高亮样式</li>
+                <li>在您访问的页面上，您可能会看到一些带下划线的合作伙伴网站链接，点击它们将在链接中放置推荐信息。</li>
+             </ul>
+
+        </div>
+        <div id="500License" style="display: block;"  class="currentLicenseInfo">
+            <div class="license-title" id="currentlicense-500-title">您正在使用限制 500 个关键字的付费版本</div>
+            <ul class="license-description" id="currentlicense-500-description">
+                <li>您的高亮限制为 500 个关键字。Highlight This! 将仅使用列表中的前 500 个关键字</li>
+                <li>您拥有所有高亮样式</li>
+                <li>您没有广告</li>
+             </ul>
+        </div>
+        <div id="unlimitedLicense" style="display: block;"  class="currentLicenseInfo">
+            <div class="license-title" id="currentlicense-unlimited-title">您正在使用无限制付费版本</div>
+            <ul class="license-description" id="currentlicense-unlimited-description">
+                <li>您的高亮是无限制的</li>
+                <li>您拥有所有高亮样式</li>
+                <li>您没有广告</li>
+
+             </ul>
+        </div>
+        <div id="changeLicense" class="license-change">
+            <div class="license-title-white" id="changelicense-title">更改版本</div>
+            <div id="changeLicenseAd">
+                <div class="new-license" id="changelicense-ad-title">启用广告，这样我就不会被限制为 200 个关键字</div>
+                <ul class="license-description" id="changelicense-ad-description">
+                    <li>您的高亮是无限制的</li>
+                    <li>您拥有所有高亮样式</li>
+                </ul>
+                <div style="margin-top: 10;"><a id="changelicense-ad-moreinfo" style="text-decoration: underline;">更多信息 </a></div>
+                <div class="license-action">
+                    <button id="licenseEnableAds"  type="button">启用广告</button>
+                </div>
+            </div>
+            <div id="changeLicenseFree">
+                <div class="new-license" id="changelicense-free-title">禁用广告，这将限制我只能使用 200 个关键字进行高亮</div>
+                <ul class="license-description" id="changelicense-free-description">
+                    <li>您的高亮限制为 200 个关键字。Highlight This! 将仅使用列表中的前 200 个关键字</li>
+                    <li>您拥有有限的高亮样式</li>
+                </ul>
+                <div class="license-action">
+                    <button id="licenseDisableAds"  type="button">禁用广告</button>
+                </div>
+            </div>
+            <div id="changeLicensePaid">
+                <div class="new-license" id="changelicense-paid-title">购买年度许可证，无需使用广告即可高亮更多关键字</div>
+                <ul class="license-description" id="changelicense-paid-description">
+                    <li>根据您选择的版本，您可以高亮 500 个或无限个关键字</li>
+                    <li>您拥有有限的高亮样式</li>
+                </ul>
+                <div class="license-action">
+                    <button id="licenseBuy"  type="button">购买许可证</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="enterLicenseKey" class="license-enter">
+            <div class="license-title-white" id="enterlicense-title">输入您的许可证密钥</div>
+            <p id="enterlicense-description">如果您已经有许可证密钥，可以在此处输入。</p>
+            <div class="fieldRow">
+                <label class="fieldLabel" id="enterlicense-label">许可证密钥：</label>
+                <input id="enteredLicenseKey"/>
+            </div>
+            <div class="license-enter-submit">
+                <div id="enteredLicenseFeedback" style="display: none;"></div>
+                <button id="validateEnteredLicenseKey" type="button" class="primaryLink" enabled>验证</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteGroup" style="display:none;font-size: 16px;
+                               text-align: center;
+                               margin-top: 50%">
+        <span id="popup_confirmDelete">您确定要删除该关键字列表及其关键字吗？</span>
+        <div>
+            <form id="orderForm">
+                <input type="hidden" id="deleteGroupId"/>
+            </form>
+            <span id="labelListName">列表名称</span> : <span id="deleteGroupName"/>
+        </div>
+        <div style="margin-top:30px">
+
+
+            <span id="yesDeleteGroup" class="secondaryButton" style="margin-right: 30px;">是</span>
+            <button id="noDeleteGroup" class="primaryLink"  type="button">否</button>
+        </div>
+    </div>
+
+    <div id="resetSettings" style="display:none;font-size: 16px;
+                               text-align: center;
+                               margin-top: 50%">
+        <div id="popup_confirmReset">
+            <div>您确定要重置所有数据和设置吗？</div>
+            <div>在继续之前请确保已备份</div>
+        </div>
+
+        <div style="margin-top:30px">
+            <span id="yesReset" class="secondaryButton" style="margin-right: 30px;">重置所有数据</span>
+            <button id="noReset" class="primaryLink"  type="button">取消</button>
+        </div>
+    </div>
+</div>
+</body>
+<footer>
+    <script src="popup/eventListeners.js"></script>
+    <script src="popup/fillLiterals.js"></script>
+    <script src="popup/settingsManager.js"></script>
+    
+    
+    <script src="popup.js"></script>
+    <script src="popup/wordListManager.js"></script>
+    <script src="popup/syncListManager.js"></script>
+    <script src="popup/backupManager.js"></script>
+    <script src="popup/notificationsManager.js"></script>
+    <script src="popup/errorManager.js"></script>
+</footer>
+</html>
