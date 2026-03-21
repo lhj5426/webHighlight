@@ -51,6 +51,7 @@ function fillLiterals(){
       "field_source": "来源：",
       "field_useRegexTokens_help": "使用正则表达式标记而不是简单的 * 和 ? 通配符",
       "field_caseSensitive_label": "区分大小写比较",
+      "field_ignoreWhitespace": "忽略空格",
       "syncLinkText": "同步",
       "field_performance": "性能",
       "performanceHelp": "定义 Highlight This 允许对您的设备资源（处理能力）产生多大影响。",

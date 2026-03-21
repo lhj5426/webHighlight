@@ -286,9 +286,28 @@ function browseHighlight() {
         chrome.tabs.sendMessage(tabs[0].id, {command: "ScrollHighlight"});
     });
 }
-function globStringToRegex(str) {
+function globStringToRegex(str, ignoreWhitespace) {
+    if (ignoreWhitespace) {
+        var chars = str.split('');
+        var regexParts = chars.map((c, index) => {
+            var escaped;
+            if (c === '*') escaped = '\\S*';
+            else if (c === '?') escaped = '.';
+            else if (/\s/.test(c)) escaped = '[\\s\\u00ad\\u200b\\u200c]*';
+            else escaped = preg_quote(c);
+            
+            if (index < chars.length - 1) {
+                return escaped + '[\\s\\u00ad\\u200b\\u200c]*';
+            } else {
+                return escaped;
+            }
+        });
+        return regexParts.join('');
+    }
     return preg_quote(str).replace(/\\\*/g, '\\S*').replace(/\\\?/g, '.');
 }
+
+
 function preg_quote (str,delimiter) {
     // http://kevin.vanzonneveld.net
     // +   original by: booeyOH
@@ -856,7 +875,9 @@ function filterWords(infilter){
     //wordListContainer
     var groupsToShow=[];
     var showGroup=false;
-    var searchExp=new RegExp(infilter,'gi');
+    var cleanedFilter = infilter.replace(/\s+/g, '');
+    var searchPattern = cleanedFilter.split('').map(c => preg_quote(c)).join('\\s*');
+    var searchExp = new RegExp(searchPattern, 'gi');
     if (infilter.length>0) {
         for (group in HighlightsData) {
 

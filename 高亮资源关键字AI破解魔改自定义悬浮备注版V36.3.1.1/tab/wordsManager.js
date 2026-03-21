@@ -177,20 +177,24 @@ function transformWordsToWordList(data,licenseType){
                     if(data[group].words[word].match(regexFindBackAgainstContent)){findBackAgainstContent=true;}
                 }
                 else{
-                    var regex=globStringToRegex(data[group].words[word]);
+                    var regex=globStringToRegex(data[group].words[word], data[group].ignoreWhitespace);
                 }
                 
                 var action=data[group].action||{type:0};
                 
+                let wordForLength = data[group].words[word];
+                if (data[group].ignoreWhitespace) {
+                    wordForLength = wordForLength.replace(/\s/g, '');
+                }
                 let pattern = /(\*|\?)/g; // Matches '*' or '?'
-                let matches = data[group].words[word].match(pattern);
+                let matches = wordForLength.match(pattern);
                 let countOfWildcards = matches ? matches.length : 0;
 
                 wordsArray.push( {
                     word: data[group].words[word].toLowerCase(),
                     "regex": regex,
                     "compiledRegex": new RegExp(regex, data[group].caseSensitive?"":"i"),
-                    "wordLengthForCompare": data[group].words[word].length - countOfWildcards,
+                    "wordLengthForCompare": wordForLength.length - countOfWildcards,
                     "cssClass": 'ht' + group,
                     "color": data[group].color,
                     "fColor": data[group].fColor,

@@ -67,24 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ensureOneParagraph();
     });
 
-    document.addEventListener('selectionchange',()=>{
-        selection=window.getSelection();
-     
-        if(selection.rangeCount>0 && document.getElementById("filterwordlist").value!=='' && selection.getRangeAt(0).commonAncestorContainer.id=='words'){
-            const range = selection.getRangeAt(0);
 
-            // Check if the selection spans multiple blocks
-            const startContainer = range.startContainer;
-            const endContainer = range.endContainer;
-        
-            if (startContainer !== endContainer) {
-              // The selection spans multiple blocks
-        
-              // Example action: Collapse the selection to the start
-              selection.collapseToStart();
-            }
-        }
-    });
    /* document.getElementById("wordsNotes").addEventListener('click', function(e){
         e.preventDefault();
         document.getElementById('words').style.display='none';
@@ -243,7 +226,9 @@ function editorToWords(){
 
 function filterWordList(infilter){
     //wordListContainer
-    var searchExp=new RegExp(infilter,'gi');
+    var cleanedFilter = infilter.replace(/\s+/g, '');
+    var searchPattern = cleanedFilter.split('').map(c => preg_quote(c)).join('\\s*');
+    var searchExp = new RegExp(searchPattern, 'gi');
     WordsSelectAll=true;
     updateWordsSelectIcon();
     document.getElementById("words").childNodes.forEach(element => {

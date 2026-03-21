@@ -160,14 +160,10 @@ chrome.runtime.onInstalled.addListener(function(details){
         var thisVersion = chrome.runtime.getManifest().version;
         debug&&console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
         // setTimeout(function(){ sendAnalytics('update'); }, 10000); // 已禁用追踪统计
-        if (details.previousVersion.substr(0,1)!=='6') {
+        if (false && details.previousVersion.substr(0,1)!=='6') {
             var migrationPage = chrome.tabs.create({
                 url:"v3migration.html?action=execute"
             });
-            // 已禁用更新说明页面
-            // var updatePage = chrome.tabs.create({
-            //     url:"https://highlightthis.net/ReleaseNote_6.html"
-            // });
         }
         else {
             // check if there is a settings object, otherwise create it all

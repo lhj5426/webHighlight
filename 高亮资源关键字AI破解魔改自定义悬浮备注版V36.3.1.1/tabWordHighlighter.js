@@ -228,11 +228,28 @@ function removeAllHighlights() {
     Debug&&console.log('removed all highlights:', highlights.length);
 }
 
+function cleanupTransparentTags() {
+    var elements = document.querySelectorAll('wbr');
+    if (elements.length > 0) {
+        elements.forEach(function(el) {
+            var parent = el.parentNode;
+            el.remove();
+            if (parent) {
+                parent.normalize();
+            }
+        });
+        Debug && console.log('Performed surgical wbr cleanup');
+    }
+}
+
 function reHighlight() {
     Debug&&console.log('rehighlight');
 
     // 先清除所有旧的高亮
     removeAllHighlights();
+    
+    // 清理透明标签并合并文本节点
+    cleanupTransparentTags();
 
     getData(function(){
         if (Settings.enabled) {
@@ -406,6 +423,9 @@ function highlightFields(wordsForBox,wordsForBoxRegex, eventTarget,skipSelectors
 
 function findWords() {
     if (Object.keys(wordsArray).length > 0) {
+        // 清理透明标签并合并文本节点
+        cleanupTransparentTags();
+        
         Highlight=false;
 
         Debug&&console.log('finding words',window.location);
@@ -460,7 +480,24 @@ function findWords() {
 }
 
 
-function globStringToRegex(str) {
+function globStringToRegex(str, ignoreWhitespace) {
+    if (ignoreWhitespace) {
+        var chars = str.split('');
+        var regexParts = chars.map((c, index) => {
+            var escaped;
+            if (c === '*') escaped = '\\S*';
+            else if (c === '?') escaped = '.';
+            else if (/\s/.test(c)) escaped = '[\\s\\u00ad\\u200b\\u200c]*';
+            else escaped = preg_quote(c);
+            
+            if (index < chars.length - 1) {
+                return escaped + '[\\s\\u00ad\\u200b\\u200c]*';
+            } else {
+                return escaped;
+            }
+        });
+        return regexParts.join('');
+    }
     return preg_quote(str).replace(/\\\*/g, '\\S*').replace(/\\\?/g, '.');
 }
 

@@ -164,6 +164,7 @@ function createGroup() {
     document.getElementById("showInEditableFields").checked = false;
     document.getElementById("notifyOnHighlight").checked = false;
     document.getElementById("caseSensitive").checked = false;
+    document.getElementById("ignoreWhitespace").checked = false;
 
     document.getElementById("regexTokens").checked = false;
     document.getElementById("field_words_help").innerHTML = getLiteral("field_words_help");
@@ -342,6 +343,7 @@ function editGroup(groupId) {
     document.getElementById("notifyFrequency").value = HighlightsData[groupId].notifyFrequency;
     document.getElementById("regexTokens").checked = HighlightsData[groupId].regexTokens;
     document.getElementById("caseSensitive").checked = HighlightsData[groupId].caseSensitive;
+    document.getElementById("ignoreWhitespace").checked = HighlightsData[groupId].ignoreWhitespace || false;
 
     if(HighlightsData[groupId].action) {displayActionOptions(HighlightsData[groupId].action.type);}
 
@@ -453,6 +455,7 @@ function formToObject(){
     groupObject.notifyFrequency = document.getElementById("notifyFrequency").value;
     groupObject.regexTokens= document.getElementById("regexTokens").checked ;
     groupObject.caseSensitive = document.getElementById("caseSensitive").checked;
+    groupObject.ignoreWhitespace = document.getElementById("ignoreWhitespace").checked;
     groupObject.storage=document.getElementById("field_storage").value;
     groupObject.type=document.getElementById("field_listType").value;
     

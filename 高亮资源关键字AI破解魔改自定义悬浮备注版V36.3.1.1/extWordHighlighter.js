@@ -546,7 +546,7 @@ function transformWordsToWordList(words){
                         if(words[group].Words[word].match(regexFindBackAgainstContent)){findBackAgainstContent=true;}
                     }
                     else{
-                        var regex=globStringToRegex(words[group].Words[word]);
+                        var regex=globStringToRegex(words[group].Words[word], words[group].ignoreWhitespace);
                     }
                    
                     var action=words[group].action||{type:0};
@@ -751,6 +751,20 @@ chrome.storage.onChanged.addListener(function (changes, areaname){
     if (areaname=='sync'){
         log('reload sync storage in mem')
         loadSyncInMemory();
+    }
+    if (areaname == 'local') {
+        for (var key in changes) {
+            if (changes[key].newValue) {
+                if (!HighlightsData.Groups) { HighlightsData.Groups = {}; }
+                HighlightsData.Groups[key] = changes[key].newValue;
+            } else {
+                if (HighlightsData.Groups) {
+                    delete HighlightsData.Groups[key];
+                }
+            }
+        }
+        localStorage['HighlightsData'] = JSON.stringify(HighlightsData);
+        requestReHighlight();
     }
 })
 
@@ -1026,9 +1040,25 @@ function setWords(inWords, inGroup, inColor, inFcolor, findwords, showon, dontsh
     return true;
 }
 
-function globStringToRegex(str) {
-    str=str.replace(/[-[\]{}()*+?.,\\^$|]/g, "\\$&");
-    return preg_quote(str).replace(/\*/g, '\S*').replace(/\\\?/g, '.');
+function globStringToRegex(str, ignoreWhitespace) {
+    if (ignoreWhitespace) {
+        var chars = str.split('');
+        var regexParts = chars.map((c, index) => {
+            var escaped;
+            if (c === '*') escaped = '\\S*';
+            else if (c === '?') escaped = '.';
+            else if (/\s/.test(c)) escaped = '[\\s\\u00ad\\u200b\\u200c]*';
+            else escaped = c.replace(/[-[\]{}()*+?.,\\^$|]/g, "\\$&");
+            
+            if (index < chars.length - 1) {
+                return escaped + '[\\s\\u00ad\\u200b\\u200c]*';
+            } else {
+                return escaped;
+            }
+        });
+        return regexParts.join('');
+    }
+    return str.replace(/[-[\]{}()*+?.,\\^$|]/g, "\\$&").replace(/\\\*/g, '\\S*').replace(/\\\?/g, '.');
 }
 
 

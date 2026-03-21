@@ -17,7 +17,24 @@ export function uuidv4() {
 }
 
 
-export function globStringToRegex(str) {
+export function globStringToRegex(str, ignoreWhitespace) {
+    if (ignoreWhitespace) {
+        var chars = str.split('');
+        var regexParts = chars.map((c, index) => {
+            var escaped;
+            if (c === '*') escaped = '\\S*';
+            else if (c === '?') escaped = '.';
+            else if (/\s/.test(c)) escaped = '[\\s\\u00ad\\u200b\\u200c]*';
+            else escaped = preg_quote(c);
+            
+            if (index < chars.length - 1) {
+                return escaped + '[\\s\\u00ad\\u200b\\u200c]*';
+            } else {
+                return escaped;
+            }
+        });
+        return regexParts.join('');
+    }
     return preg_quote(str).replace(/\\\*/g, '\\S*').replace(/\\\?/g, '.');
 }
 
